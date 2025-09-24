@@ -1,0 +1,15 @@
+<h1>All Journal Entries</h1>
+
+<% if @entries.any? %>
+  <ul style="list-style:none; padding:0;">
+    <% @entries.each do |entry| %>
+      <li style="background:#f9f9f9; margin:10px 0; padding:15px; border-radius:8px;">
+        <h3><%= link_to entry.title, entry %></h3>
+        <p><strong>Date:</strong> <%= entry.entry_date %> | <strong>Tags:</strong> <%= entry.tags %></p>
+        <p><%= truncate(entry.content, length: 120) %></p>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No journal entries yet. <%= link_to "Write one now!", new_entry_path %></p>
+<% end %>

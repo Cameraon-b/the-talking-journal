@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>The Talking Journal</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+
+<body>
+<nav style="background:#333; padding:10px;">
+  <%= link_to "Home", root_path, style: "color:white; margin-right:15px;" %>
+  <%= link_to "New Entry", new_entry_path, style: "color:white; margin-right:15px;" %>
+  <%= link_to "About", about_path, style: "color:white; margin-right:15px;" %>
+
+  <% if user_signed_in? %>
+    <span style="color:white; margin-right:15px;">Signed in as <%= current_user.email %></span>
+    <%= button_to "Sign Out", destroy_user_session_path, method: :delete, form: { style: "display:inline;" }, style: "background:none; border:none; color:white; cursor:pointer;" %>
+<% else %>
+    <%= link_to "Sign Up", new_user_registration_path, style: "color:white; margin-right:15px;" %>
+    <%= link_to "Sign In", new_user_session_path, style: "color:white;" %>
+  <% end %>
+</nav>
+
+<% flash.each do |key, value| %>
+  <div style="padding:10px; margin:10px; border-radius:5px;
+    background:<%= key == "notice" ? "#d4edda" : "#f8d7da" %>;
+    color:<%= key == "notice" ? "#155724" : "#721c24" %>;">
+    <%= value %>
+  </div>
+<% end %>
+
+
+
+<div style="max-width:800px; margin:20px auto; padding:0 15px;">
+  <%= yield %>
+</div>
+
+
