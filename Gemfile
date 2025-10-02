@@ -66,3 +66,7 @@ end
 gem "devise", "~> 4.9"
 
 gem "jquery-rails"
+
+gem "ruby-openai"
+
+gem "dotenv-rails", groups: [:development, :test]

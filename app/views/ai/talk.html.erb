@@ -1,0 +1,83 @@
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- Sidebar with entries -->
+    <div class="col-md-3">
+      <h4 class="text-white">Your Entries</h4>
+      <% if user_signed_in? && @entries.any? %>
+        <div class="list-group">
+          <% @entries.each do |entry| %>
+            <a href="<%= entry_path(entry) %>" class="list-group-item list-group-item-action bg-dark text-white border-0">
+              <strong><%= entry.title %></strong><br>
+              <small class="text-muted"><%= entry.entry_date %></small>
+            </a>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-muted">No entries yet.</p>
+      <% end %>
+    </div>
+
+    <!-- Main chat area -->
+    <div class="col-md-9">
+      <h2 class="text-white mb-3">Talk with the Journal</h2>
+
+      <!-- Quick options -->
+      <div class="mb-3 d-flex flex-wrap gap-2">
+        <button class="btn quick-option">Interpret a Dream</button>
+        <button class="btn quick-option">Share an Idea</button>
+        <button class="btn quick-option">Reflect on a Reflection</button>
+      </div>
+
+      <!-- Conversation box -->
+      <div class="card mb-3 chat-window" style="height: 400px; overflow-y: auto;">
+        <div class="card-body" id="conversation">
+          <% if @messages.present? %>
+            <% @messages.each do |msg| %>
+              <div class="chat-message <%= msg[:role] == "user" ? "user-message" : "journal-message" %>">
+                <p><%= msg[:content] %></p>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="text-muted">This is where your conversation with the Journal will appear...</p>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Input box -->
+      <%= form_with url: chat_path, method: :post, local: true do |f| %>
+        <div class="input-group">
+          <%= f.text_field :message, class: "form-control chat-input", placeholder: "Type your message here..." %>
+          <button class="btn btn-outline-light" type="submit">Send</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<style>
+    .chat-window {
+        background-color: #2b2b2b;
+        color: white;
+    }
+    .chat-message {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 8px;
+    }
+    .user-message {
+        background-color: #444;
+        text-align: right;
+    }
+    .journal-message {
+        background-color: #3a3a3a;
+        text-align: left;
+    }
+    .quick-option {
+        background-color: #555;
+        color: white;
+    }
+    .quick-option:hover {
+        background-color: #666;
+    }
+</style>
+
