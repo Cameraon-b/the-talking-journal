@@ -2,36 +2,42 @@ class AiController < ApplicationController
   before_action :authenticate_user!
 
   def talk
-    # Load the current user's entries so the sidebar has something to show
+    # Load this user’s saved chat history from DB
     @entries = current_user.entries.order(created_at: :desc)
-
-    # Load conversation messages from the session
-    @messages = session[:messages] || []
+    @messages = current_user.chat_messages.order(created_at: :asc)
   end
 
   def chat
-    client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
+    user_message = params[:chat][:message]
 
-    session[:messages] ||= []
-    session[:messages] << { role: "user", content: params[:message] }
+    if user_message.present?
+      # Save the user’s message
+      current_user.chat_messages.create!(role: "user", content: user_message)
 
-    response = client.chat(
-      parameters: {
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: "You are The Talking Journal, a reflective and helpful guide." },
-          *session[:messages]
-        ]
-      }
-    )
+      # Call OpenAI
+      client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
+      response = client.chat(
+        parameters: {
+          model: "gpt-4o-mini",
+          messages: [
+            { role: "system", content: "You are The Talking Journal, a supportive reflective AI." },
+            { role: "user", content: user_message }
+          ]
+        }
+      )
 
-    ai_reply = response.dig("choices", 0, "message", "content")
-    session[:messages] << { role: "assistant", content: ai_reply }
+      ai_reply = response.dig("choices", 0, "message", "content")
 
-    # Keep sidebar entries visible after sending a message
-    @entries = current_user.entries.order(created_at: :desc)
-    @messages = session[:messages]
+      # Save the AI’s reply
+      current_user.chat_messages.create!(role: "journal", content: ai_reply)
+    end
 
-    render :talk
+    redirect_to talk_path
+  end
+
+  def clear
+    current_user.chat_messages.destroy_all
+    flash[:notice] = "Conversation cleared."
+    redirect_to talk_path
   end
 end

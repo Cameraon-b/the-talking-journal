@@ -26,25 +26,33 @@
         <button class="btn quick-option">Interpret a Dream</button>
         <button class="btn quick-option">Share an Idea</button>
         <button class="btn quick-option">Reflect on a Reflection</button>
+
+        <%= button_to "Clear Conversation", clear_chat_path,
+                      method: :post,
+                      class: "btn btn-danger ms-auto",
+                      form: { data: { turbo_confirm: "Are you sure you want to clear the chat?" } } %>
       </div>
+
 
       <!-- Conversation box -->
       <div class="card mb-3 chat-window" style="height: 400px; overflow-y: auto;">
-        <div class="card-body" id="conversation">
-          <% if @messages.present? %>
-            <% @messages.each do |msg| %>
-              <div class="chat-message <%= msg[:role] == "user" ? "user-message" : "journal-message" %>">
-                <p><%= msg[:content] %></p>
+        <div class="card-body">
+          <% @messages.each do |msg| %>
+            <% role = msg["role"] || msg[:role] %>
+            <% content = msg["content"] || msg[:content] %>
+
+            <div class="<%= role == "user" || role == :user ? 'chat-row user-row' : 'chat-row journal-row' %>">
+              <div class="chat-message <%= role == "user" || role == :user ? 'user-message' : 'journal-message' %>">
+                <%= content.presence || "[no content]" %>
               </div>
-            <% end %>
-          <% else %>
-            <p class="text-muted">This is where your conversation with the Journal will appear...</p>
+            </div>
           <% end %>
+
         </div>
       </div>
 
       <!-- Input box -->
-      <%= form_with url: chat_path, method: :post, local: true do |f| %>
+      <%= form_with url: chat_path, scope: :chat, method: :post, local: true do |f| %>
         <div class="input-group">
           <%= f.text_field :message, class: "form-control chat-input", placeholder: "Type your message here..." %>
           <button class="btn btn-outline-light" type="submit">Send</button>
@@ -54,30 +62,13 @@
   </div>
 </div>
 
-<style>
-    .chat-window {
-        background-color: #2b2b2b;
-        color: white;
+
+<script>
+    // Auto-scroll chat window to bottom
+    const chatMessages = document.getElementById("chat-messages");
+    if (chatMessages) {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     }
-    .chat-message {
-        margin-bottom: 10px;
-        padding: 10px;
-        border-radius: 8px;
-    }
-    .user-message {
-        background-color: #444;
-        text-align: right;
-    }
-    .journal-message {
-        background-color: #3a3a3a;
-        text-align: left;
-    }
-    .quick-option {
-        background-color: #555;
-        color: white;
-    }
-    .quick-option:hover {
-        background-color: #666;
-    }
-</style>
+</script>
+
 
