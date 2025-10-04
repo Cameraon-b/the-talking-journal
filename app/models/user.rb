@@ -5,4 +5,7 @@ class User < ApplicationRecord
 
   has_many :entries, dependent: :destroy
   has_many :chat_messages, dependent: :destroy
+  has_many :conversations, dependent: :destroy
+  has_many :chat_messages, dependent: :destroy
+
 end

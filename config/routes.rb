@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   # Journal entries
   resources :entries
 
+  # Conversations (for AI chat history)
+  resources :conversations, only: [:create, :destroy]
+
   # Static pages
   get "about", to: "pages#about"
 
@@ -13,7 +16,5 @@ Rails.application.routes.draw do
 
   # Root path
   root "entries#index"
-
-  post "clear_chat", to: "ai#clear", as: "clear_chat"
-
 end
+

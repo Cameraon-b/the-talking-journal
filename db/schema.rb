@@ -10,14 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_02_041547) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_03_031516) do
   create_table "chat_messages", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "role"
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "conversation_id", null: false
+    t.index ["conversation_id"], name: "index_chat_messages_on_conversation_id"
     t.index ["user_id"], name: "index_chat_messages_on_user_id"
+  end
+
+  create_table "conversations", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_conversations_on_user_id"
   end
 
   create_table "entries", force: :cascade do |t|
@@ -44,6 +54,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_02_041547) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "chat_messages", "conversations"
   add_foreign_key "chat_messages", "users"
+  add_foreign_key "conversations", "users"
   add_foreign_key "entries", "users"
 end
