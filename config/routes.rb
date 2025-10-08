@@ -1,13 +1,16 @@
 Rails.application.routes.draw do
-  get "ai/test"
   devise_for :users
-  root "entries#index"         # homepage = list of entries
-  resources :entries           # RESTful routes for journal entries
+
+  # Journal entries
+  resources :entries
+
+  # Static pages
   get "about", to: "pages#about"
-  get "ai/test", to: "ai#test"
-  get  "talk", to: "ai#talk"
-  post "chat", to: "ai#chat"
 
+  # AI routes
+  get  "talk", to: "ai#talk", as: :talk
+  post "chat", to: "ai#chat", as: :chat
 
-
+  # Root path
+  root "entries#index"
 end

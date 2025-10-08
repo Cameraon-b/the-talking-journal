@@ -60,11 +60,16 @@
     <orderEntry type="library" scope="PROVIDED" name="debug (v1.11.0, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="devise (v4.9.4, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="dotenv (v3.1.8, ruby-3.4.5-p51) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="dotenv-rails (v3.1.8, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="drb (v2.2.3, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ed25519 (v1.4.0, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="erb (v5.0.2, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="erubi (v1.13.1, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="et-orbi (v1.3.0, ruby-3.4.5-p51) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="event_stream_parser (v1.0.0, ruby-3.4.5-p51) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="faraday (v2.14.0, ruby-3.4.5-p51) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="faraday-multipart (v1.1.1, ruby-3.4.5-p51) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="faraday-net_http (v3.4.1, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="fugit (v1.11.2, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="globalid (v1.3.0, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="i18n (v1.14.7, ruby-3.4.5-p51) [gem]" level="application" />
@@ -85,6 +90,7 @@
     <orderEntry type="library" scope="PROVIDED" name="mini_mime (v1.1.5, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="minitest (v5.25.5, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="msgpack (v1.8.0, ruby-3.4.5-p51) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="multipart-post (v2.4.1, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="net-http (v0.6.0, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="net-imap (v0.5.10, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="net-pop (v0.1.2, ruby-3.4.5-p51) [gem]" level="application" />
@@ -128,6 +134,7 @@
     <orderEntry type="library" scope="PROVIDED" name="rubocop-performance (v1.26.0, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rubocop-rails (v2.33.3, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rubocop-rails-omakase (v1.1.0, ruby-3.4.5-p51) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="ruby-openai (v8.3.0, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ruby-progressbar (v1.13.0, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rubyzip (v3.1.0, ruby-3.4.5-p51) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="securerandom (v0.4.1, ruby-3.4.5-p51) [gem]" level="application" />

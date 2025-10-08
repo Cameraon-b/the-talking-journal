@@ -98,41 +98,52 @@
 
     /* Entry show page */
     .entry-show, .entry-container {
-        background-color: #3a3a3a; /* same as card background */
+        background-color: #3a3a3a;
         color: #ffffff;
         padding: 20px;
         border-radius: 8px;
     }
 
     .card-text {
-        color: #dddddd !important; /* softer white/gray for readability */
+        color: #dddddd !important;
     }
 
+    /* Chat window */
     .chat-window {
         background-color: #2b2b2b;
-        height: 400px;
-        overflow-y: auto;
         border: none;
     }
 
-    .chat-message {
-        max-width: 75%;
-        padding: 10px 15px;
-        border-radius: 20px;
+    .chat-row {
+        display: flex;
+        width: 100%;
         margin-bottom: 10px;
     }
 
+    .user-row {
+        justify-content: flex-end; /* push user messages to the right */
+    }
+
+    .journal-row {
+        justify-content: flex-start; /* push journal messages to the left */
+    }
+
+    .chat-message {
+        max-width: 70%;
+        padding: 10px 15px;
+        border-radius: 15px;
+        word-wrap: break-word;
+    }
+
     .user-message {
-        background-color: #4a4a4a;
-        color: white;
-        margin-left: auto;
+        background-color: #4a4a4a; /* darker bubble for user */
+        color: #fff;
         text-align: right;
     }
 
     .journal-message {
-        background-color: #3a3a3a;
-        color: white;
-        margin-right: auto;
+        background-color: #3a3a3a; /* lighter bubble for journal */
+        color: #fff;
         text-align: left;
     }
 
@@ -141,13 +152,12 @@
         color: white;
         border: 1px solid #555;
     }
+
     .chat-input::placeholder {
         color: #aaa;
     }
-
-
-
 </style>
+
 
 <body>
 <!-- Bootstrap Navbar -->
