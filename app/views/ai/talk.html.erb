@@ -1,6 +1,63 @@
 <div class="container-fluid mt-4">
   <div class="row">
-    <!-- Sidebar with entries -->
+    <!-- Sidebar with conversations (left) -->
+    <div class="col-md-3">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h4 class="text-white">Conversations</h4>
+        <%= button_to "New", conversations_path, method: :post, class: "btn btn-sm btn-primary" %>
+      </div>
+
+      <% if @conversations.any? %>
+        <div class="list-group">
+          <% @conversations.each do |conv| %>
+            <div class="d-flex justify-content-between align-items-center list-group-item bg-dark text-white border-0 <%= 'active' if @conversation&.id == conv.id %>">
+              <a href="<%= talk_path(conversation_id: conv.id) %>" class="text-white text-decoration-none flex-grow-1">
+                <%= conv.title %>
+              </a>
+              <%= button_to "×", conversation_path(conv), method: :delete,
+                            class: "btn btn-sm btn-danger ms-2",
+                            form: { data: { turbo_confirm: "Delete this conversation?" } } %>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-muted">No conversations yet.</p>
+      <% end %>
+    </div>
+
+    <!-- Main chat area (middle) -->
+    <div class="col-md-6">
+      <h2 class="text-white mb-3">Talk with the Journal</h2>
+
+      <div class="card mb-3 chat-window" style="height: 400px; overflow-y: auto; background-color:#3a3a3a;">
+        <div class="card-body" id="chat-messages">
+          <% if @messages.present? %>
+            <% @messages.each do |msg| %>
+              <div class="<%= msg.role.to_s == "user" ? 'chat-row user-row' : 'chat-row journal-row' %>">
+                <div class="chat-message <%= msg.role.to_s == "user" ? 'user-message' : 'journal-message' %>">
+                  <%= msg.content.presence || "[no content]" %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="text-muted">No messages yet. Start a conversation below!</p>
+          <% end %>
+        </div>
+      </div>
+
+      <% if @conversation %>
+        <%= form_with url: chat_path(conversation_id: @conversation.id), scope: :chat, method: :post, local: true do |f| %>
+          <div class="input-group">
+            <%= f.text_field :message, class: "form-control chat-input", placeholder: "Type your message here..." %>
+            <button class="btn btn-outline-light" type="submit">Send</button>
+          </div>
+        <% end %>
+      <% else %>
+        <p class="text-muted">Start a new conversation to begin chatting.</p>
+      <% end %>
+    </div>
+
+    <!-- Sidebar with entries (right) -->
     <div class="col-md-3">
       <h4 class="text-white">Your Entries</h4>
       <% if user_signed_in? && @entries.any? %>
@@ -16,53 +73,12 @@
         <p class="text-muted">No entries yet.</p>
       <% end %>
     </div>
-
-    <!-- Main chat area -->
-    <div class="col-md-9">
-      <h2 class="text-white mb-3">Talk with the Journal</h2>
-
-      <!-- Quick options -->
-      <div class="mb-3 d-flex flex-wrap gap-2">
-        <button class="btn quick-option">Interpret a Dream</button>
-        <button class="btn quick-option">Share an Idea</button>
-        <button class="btn quick-option">Reflect on a Reflection</button>
-      </div>
-
-      <!-- Conversation box -->
-      <div class="card mb-3 chat-window" style="height: 400px; overflow-y: auto;">
-        <div class="card-body" id="chat-messages">
-          <% @messages&.each do |msg| %>
-            <% role = msg["role"] || msg[:role] %>
-            <% content = msg["content"] || msg[:content] %>
-
-            <div class="<%= role == "user" || role == :user ? 'chat-row user-row' : 'chat-row journal-row' %>">
-              <div class="chat-message <%= role == "user" || role == :user ? 'user-message' : 'journal-message' %>">
-                <p class="mb-0"><%= content.presence || "[no content]" %></p>
-              </div>
-            </div>
-          <% end %>
-        </div>
-      </div>
-
-      <!-- Input box -->
-      <%= form_with url: chat_path, scope: :chat, method: :post, local: true do |f| %>
-        <div class="input-group">
-          <%= f.text_field :message, class: "form-control chat-input", placeholder: "Type your message here..." %>
-          <button class="btn btn-outline-light" type="submit">Send</button>
-        </div>
-      <% end %>
-    </div>
   </div>
 </div>
 
 <script>
-    // Auto-scroll chat window to bottom
-    document.addEventListener("turbo:load", () => {
-        const chatMessages = document.getElementById("chat-messages");
-        if (chatMessages) {
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-    });
+    const chatMessages = document.getElementById("chat-messages");
+    if (chatMessages) {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
 </script>
-
-
