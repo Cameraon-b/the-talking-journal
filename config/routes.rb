@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :entries
 
   # Conversations
-  resources :conversations, only: [:create, :destroy]
+  resources :conversations, only: [:create, :destroy, :update]
 
   # Static pages
   get "about", to: "pages#about"

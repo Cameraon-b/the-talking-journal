@@ -10,13 +10,27 @@
       <% if @conversations.any? %>
         <div class="list-group">
           <% @conversations.each do |conv| %>
-            <div class="d-flex justify-content-between align-items-center list-group-item bg-dark text-white border-0 <%= 'active' if @conversation&.id == conv.id %>">
-              <a href="<%= talk_path(conversation_id: conv.id) %>" class="text-white text-decoration-none flex-grow-1">
-                <%= conv.title %>
-              </a>
-              <%= button_to "×", conversation_path(conv), method: :delete,
-                            class: "btn btn-sm btn-danger ms-2",
-                            form: { data: { turbo_confirm: "Delete this conversation?" } } %>
+            <div class="list-group-item bg-dark text-white border-0 <%= 'active' if @conversation&.id == conv.id %>">
+              <div class="d-flex justify-content-between align-items-center">
+                <a href="<%= talk_path(conversation_id: conv.id) %>" class="text-white text-decoration-none flex-grow-1">
+                  <%= conv.title %>
+                </a>
+
+                <!-- Rename toggle button -->
+                <button class="btn btn-sm btn-outline-light ms-2" type="button" onclick="toggleRenameForm(<%= conv.id %>)">✎</button>
+
+                <%= button_to "×", conversation_path(conv), method: :delete, class: "btn btn-sm btn-danger ms-2", form: { data: { turbo_confirm: 'Delete this conversation?' } } %>
+              </div>
+
+              <!-- Hidden rename form -->
+              <div id="rename-form-<%= conv.id %>" style="display:none;" class="mt-2">
+                <%= form_with(model: conv, url: conversation_path(conv), method: :patch, local: true) do |f| %>
+                  <div class="input-group input-group-sm">
+                    <%= f.text_field :title, value: conv.title, class: "form-control form-control-sm" %>
+                    <button class="btn btn-primary btn-sm" type="submit">Save</button>
+                  </div>
+                <% end %>
+              </div>
             </div>
           <% end %>
         </div>
@@ -29,13 +43,13 @@
     <div class="col-md-6">
       <h2 class="text-white mb-3">Talk with the Journal</h2>
 
-      <div class="card mb-3 chat-window" style="height: 400px; overflow-y: auto; background-color:#3a3a3a;">
+      <div class="card mb-3 chat-window" style="height: 400px; overflow-y: auto; background-color:#212529;">
         <div class="card-body" id="chat-messages">
           <% if @messages.present? %>
             <% @messages.each do |msg| %>
-              <div class="<%= msg.role.to_s == "user" ? 'chat-row user-row' : 'chat-row journal-row' %>">
-                <div class="chat-message <%= msg.role.to_s == "user" ? 'user-message' : 'journal-message' %>">
-                  <%= msg.content.presence || "[no content]" %>
+              <div class="<%= msg.role.to_s == 'user' ? 'chat-row user-row' : 'chat-row journal-row' %>">
+                <div class="chat-message <%= msg.role.to_s == 'user' ? 'user-message' : 'journal-message' %>">
+                  <%= msg.content.presence || '[no content]' %>
                 </div>
               </div>
             <% end %>
@@ -80,5 +94,10 @@
     const chatMessages = document.getElementById("chat-messages");
     if (chatMessages) {
         chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function toggleRenameForm(id) {
+        const form = document.getElementById(`rename-form-${id}`);
+        form.style.display = form.style.display === "none" ? "block" : "none";
     }
 </script>
