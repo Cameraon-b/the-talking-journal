@@ -1,0 +1,7 @@
+<turbo-stream target="chat-window" action="replace">
+  <template>
+    <%= render partial: "ai/chat_window",
+               formats: [:html],
+               locals: { conversation: @conversation, messages: @messages } %>
+  </template>
+</turbo-stream>

@@ -1,0 +1,55 @@
+<div class="card mb-3 chat-window"
+     style="height: 400px; overflow-y: auto; background-color:#212529;">
+  <div class="card-body" id="chat-messages">
+    <% if messages.present? %>
+      <% messages.each do |msg| %>
+        <div class="<%= msg.role.to_s == 'user' ? 'chat-row user-row' : 'chat-row journal-row' %>">
+          <div class="chat-message <%= msg.role.to_s == 'user' ? 'user-message' : 'journal-message' %> fade-in">
+            <% if msg.content == "The Journal is typing..." %>
+              <span class="typing-indicator"><%= msg.content %></span>
+            <% else %>
+              <%= msg.content.presence || '[no content]' %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-muted">No messages yet. Start a conversation below!</p>
+    <% end %>
+  </div>
+</div>
+
+<script>
+    function scrollChatToBottom() {
+        const chatMessages = document.getElementById("chat-messages");
+        if (chatMessages) {
+            chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: "smooth" });
+        }
+    }
+
+    // When Turbo renders or replaces part of the chat window
+    document.addEventListener("turbo:render", () => {
+        setTimeout(scrollChatToBottom, 150);
+    });
+
+    // When new Turbo Streams arrive (e.g., new AI message)
+    document.addEventListener("turbo:before-stream-render", (event) => {
+        if (event.target && event.target.querySelector && event.target.querySelector("#chat-messages")) {
+            setTimeout(scrollChatToBottom, 150);
+        }
+    });
+</script>
+
+
+<script>
+    // Wait for the form submission to actually finish before clearing input
+    document.addEventListener("turbo:submit-end", function(e) {
+        if (e.target.matches("form[action*='chat']")) {
+            const input = e.target.querySelector("input[name='chat[message]']");
+            if (input) input.value = "";
+        }
+    });
+</script>
+
+
+

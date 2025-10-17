@@ -1,6 +1,7 @@
 <div class="container-fluid mt-4">
   <div class="row">
-    <!-- Sidebar with conversations (left) -->
+
+    <!-- Conversations sidebar -->
     <div class="col-md-3">
       <div class="d-flex justify-content-between align-items-center mb-2">
         <h4 class="text-white">Conversations</h4>
@@ -16,13 +17,14 @@
                   <%= conv.title %>
                 </a>
 
-                <!-- Rename toggle button -->
                 <button class="btn btn-sm btn-outline-light ms-2" type="button" onclick="toggleRenameForm(<%= conv.id %>)">✎</button>
 
-                <%= button_to "×", conversation_path(conv), method: :delete, class: "btn btn-sm btn-danger ms-2", form: { data: { turbo_confirm: 'Delete this conversation?' } } %>
+                <%= button_to "×", conversation_path(conv),
+                              method: :delete,
+                              class: "btn btn-sm btn-danger ms-2",
+                              form: { data: { turbo_confirm: 'Delete this conversation?' } } %>
               </div>
 
-              <!-- Hidden rename form -->
               <div id="rename-form-<%= conv.id %>" style="display:none;" class="mt-2">
                 <%= form_with(model: conv, url: conversation_path(conv), method: :patch, local: true) do |f| %>
                   <div class="input-group input-group-sm">
@@ -39,30 +41,22 @@
       <% end %>
     </div>
 
-    <!-- Main chat area (middle) -->
+    <!-- Main chat area -->
     <div class="col-md-6">
       <h2 class="text-white mb-3">Talk with the Journal</h2>
 
-      <div class="card mb-3 chat-window" style="height: 400px; overflow-y: auto; background-color:#212529;">
-        <div class="card-body" id="chat-messages">
-          <% if @messages.present? %>
-            <% @messages.each do |msg| %>
-              <div class="<%= msg.role.to_s == 'user' ? 'chat-row user-row' : 'chat-row journal-row' %>">
-                <div class="chat-message <%= msg.role.to_s == 'user' ? 'user-message' : 'journal-message' %>">
-                  <%= msg.content.presence || '[no content]' %>
-                </div>
-              </div>
-            <% end %>
-          <% else %>
-            <p class="text-muted">No messages yet. Start a conversation below!</p>
-          <% end %>
-        </div>
-      </div>
+      <%= render partial: "ai/chat_window",
+                 locals: { conversation: @conversation, messages: @messages } %>
 
       <% if @conversation %>
-        <%= form_with url: chat_path(conversation_id: @conversation.id), scope: :chat, method: :post, local: true do |f| %>
-          <div class="input-group">
-            <%= f.text_field :message, class: "form-control chat-input", placeholder: "Type your message here..." %>
+        <%= form_with url: chat_path(conversation_id: @conversation.id),
+                      scope: :chat,
+                      method: :post,
+                      local: true do |f| %>
+          <div class="input-group mt-2">
+            <%= f.text_field :message,
+                             class: "form-control chat-input",
+                             placeholder: "Type your message here..." %>
             <button class="btn btn-outline-light" type="submit">Send</button>
           </div>
         <% end %>
@@ -71,7 +65,7 @@
       <% end %>
     </div>
 
-    <!-- Sidebar with entries (right) -->
+    <!-- Entries sidebar -->
     <div class="col-md-3">
       <h4 class="text-white">Your Entries</h4>
       <% if user_signed_in? && @entries.any? %>
@@ -91,13 +85,17 @@
 </div>
 
 <script>
-    const chatMessages = document.getElementById("chat-messages");
-    if (chatMessages) {
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
     function toggleRenameForm(id) {
         const form = document.getElementById(`rename-form-${id}`);
         form.style.display = form.style.display === "none" ? "block" : "none";
     }
+</script>
+
+<script>
+    document.addEventListener("turbo:load", () => {
+        setTimeout(() => {
+            const chatMessages = document.getElementById("chat-messages");
+            if (chatMessages) chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: "instant" });
+        }, 200);
+    });
 </script>
