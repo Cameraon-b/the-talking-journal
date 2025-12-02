@@ -5,7 +5,7 @@
       <% messages.each do |msg| %>
         <div class="<%= msg.role.to_s == 'user' ? 'chat-row user-row' : 'chat-row journal-row' %>">
           <div class="chat-message <%= msg.role.to_s == 'user' ? 'user-message' : 'journal-message' %> fade-in">
-            <% if msg.content == "The Journal is typing..." %>
+            <% if msg.content == "The Journal is thinking..." %>
               <span class="typing-indicator"><%= msg.content %></span>
             <% else %>
               <%= msg.content.presence || '[no content]' %>
