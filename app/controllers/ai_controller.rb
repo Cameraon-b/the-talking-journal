@@ -29,7 +29,7 @@ class AiController < ApplicationController
     placeholder = @conversation.chat_messages.create!(
       user: current_user,
       role: :journal,
-      content: "The Journal is typing..."
+      content: "The Journal is thinking..."
     )
 
     # Immediately render Turbo update so typing indicator appears
